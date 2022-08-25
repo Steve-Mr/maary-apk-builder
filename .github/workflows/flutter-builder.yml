@@ -65,8 +65,8 @@ jobs:
           flutter build apk
           --split-per-abi 
           --release
-          --flavor free
-          --dart-define flavor=free
+          --flavor pro
+          --dart-define flavor=pro
           --dart-define twitter_consumer_key=${{ secrets.CONSUMER_KEY_FREE }}
           --dart-define twitter_consumer_secret=${{ secrets.CONSUMER_SECRET_FREE }}
           
