@@ -32,10 +32,10 @@ jobs:
           ref: master
         
       - name: Storing key.properties
-        run: echo "${{ secrets.KEY_PROPERTIES_PRO }}" | base64 --decode > android/key.properties
+        run: echo "${{ secrets.KEY_PROPERTIES_FREE }}" | base64 --decode > android/key.properties
 
       - name: Storing keystore
-        run: echo "${{ secrets.KEYSTORE_PRO }}" | base64 --decode > android/key.jks
+        run: echo "${{ secrets.KEYSTORE_FREE }}" | base64 --decode > android/key.jks
         
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -62,10 +62,10 @@ jobs:
           flutter build apk
           --split-per-abi 
           --release
-          --flavor pro
-          --dart-define flavor=pro
-          --dart-define twitter_consumer_key=${{ secrets.CONSUMER_KEY_PRO }}
-          --dart-define twitter_consumer_secret=${{ secrets.CONSUMER_SECRET_PRO }}
+          --flavor free
+          --dart-define flavor=free
+          --dart-define twitter_consumer_key=${{ secrets.CONSUMER_KEY_FREE }}
+          --dart-define twitter_consumer_secret=${{ secrets.CONSUMER_SECRET_FREE }}
           
       - name: Upload .apks to artifacts
         uses: svenstaro/upload-release-action@v2
