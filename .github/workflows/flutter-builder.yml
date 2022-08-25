@@ -41,10 +41,10 @@ jobs:
         
 
       - name: Storing key.properties
-        run: echo "${{ secrets.KEY_PROPERTIES_FREE }}" | base64 --decode > android/key.properties
+        run: echo "${{ secrets.KEY_PROPERTIES_FREE }}" | base64 --decode > ./project/android/key.properties
 
       - name: Storing keystore
-        run: echo "${{ secrets.KEYSTORE_FREE }}" | base64 --decode > android/key.jks
+        run: echo "${{ secrets.KEYSTORE_FREE }}" | base64 --decode > ./project/android/key.jks
 
       - name: cd
         run: cd ./project
