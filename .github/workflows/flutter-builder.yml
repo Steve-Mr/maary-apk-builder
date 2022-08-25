@@ -50,6 +50,9 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ env.flutter-channel }}
+      
+      - name: debug tree
+        run: tree
         
       - name: Get dependencies
         run: flutter pub get
