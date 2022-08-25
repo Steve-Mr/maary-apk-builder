@@ -35,6 +35,9 @@ jobs:
         run: echo "${{ secrets.KEY_PROPERTIES_FREE }}" | base64 --decode > android/key.properties
 
       - name: Storing keystore
+        run: echo "${{ secrets.KEYSTORE_FREE }}" | base64 --decode > android/app/key.jks
+        
+      - name: Storing keystore
         run: echo "${{ secrets.KEYSTORE_FREE }}" | base64 --decode > android/key.jks
         
       - name: Setup Java
