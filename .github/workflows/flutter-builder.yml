@@ -20,7 +20,23 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      
+      - name: Clone project
+        uses: actions/checkout@v3
+        with:
+          repository: robertodoering/harpy
+          path: project
+          ref: master
+        
+      - name: Storing key.properties
+        run: echo "${{ secrets.KEY_PROPERTIES_FREE }}" | base64 --decode > ./project/android/key.properties
 
+      - name: Storing keystore
+        run: echo "${{ secrets.KEYSTORE_FREE }}" | base64 --decode > ./project/android/key.jks
+
+      - name: cd
+        run: cd ./project
+        
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -31,23 +47,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ env.flutter-channel }}
-      
-      - name: Clone project
-        uses: actions/checkout@v3
-        with:
-          repository: robertodoering/harpy
-          path: project
-          ref: master
-        
-
-      - name: Storing key.properties
-        run: echo "${{ secrets.KEY_PROPERTIES_FREE }}" | base64 --decode > ./project/android/key.properties
-
-      - name: Storing keystore
-        run: echo "${{ secrets.KEYSTORE_FREE }}" | base64 --decode > ./project/android/key.jks
-
-      - name: cd
-        run: cd ./project
         
       - name: Get dependencies
         run: flutter pub get
