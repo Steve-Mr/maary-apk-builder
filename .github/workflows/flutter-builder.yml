@@ -69,6 +69,8 @@ jobs:
           --dart-define flavor=pro
           --dart-define twitter_consumer_key=${{ secrets.CONSUMER_KEY_FREE }}
           --dart-define twitter_consumer_secret=${{ secrets.CONSUMER_SECRET_FREE }}
+          --dart-define sentry_dsn=""
+          --dart-define aes_key=""
           
       - name: Upload .apks to artifacts
         uses: svenstaro/upload-release-action@v2
