@@ -45,7 +45,7 @@ def sendAPKs(path):
     apks = os.listdir("apks")
     apks.sort()
     apk = os.path.join("apks", apks[0])
-    sendDocument(user_id="@maaryCI", path = apk, message="#termux #apk")
+    sendDocument(user_id="@maaryCI", path = apk, message="#termux #apk https://github.com/Steve-Mr/maary-apk-builder.git")
 
 if __name__ == '__main__':
     sendAPKs("./apks")
