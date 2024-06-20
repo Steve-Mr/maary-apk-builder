@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: '0 0 1 * *'
 
@@ -21,7 +24,7 @@ jobs:
         with:
           repository: termux/termux-app
           fetch-depth: 1
-          ref: master
+          ref: github-releases/v0.119.0-beta.1
 
       - name: Build APKs
         shell: bash {0}
