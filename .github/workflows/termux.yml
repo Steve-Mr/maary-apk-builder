@@ -75,42 +75,42 @@ jobs:
             exit_on_error "Generate sha25sums failed for '$APK_VERSION_TAG' release."
           fi
       - name: Attach universal APK file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APK_BASENAME_PREFIX }}_universal
           path: |
             ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_universal.apk
             ${{ env.APK_DIR_PATH }}/output-metadata.json
       - name: Attach arm64-v8a APK file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APK_BASENAME_PREFIX }}_arm64-v8a
           path: |
             ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_arm64-v8a.apk
             ${{ env.APK_DIR_PATH }}/output-metadata.json
       - name: Attach armeabi-v7a APK file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APK_BASENAME_PREFIX }}_armeabi-v7a
           path: |
             ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_armeabi-v7a.apk
             ${{ env.APK_DIR_PATH }}/output-metadata.json
       - name: Attach x86_64 APK file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APK_BASENAME_PREFIX }}_x86_64
           path: |
             ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_x86_64.apk
             ${{ env.APK_DIR_PATH }}/output-metadata.json
       - name: Attach x86 APK file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APK_BASENAME_PREFIX }}_x86
           path: |
             ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_x86.apk
             ${{ env.APK_DIR_PATH }}/output-metadata.json
       - name: Attach sha256sums file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APK_BASENAME_PREFIX }}_sha256sums
           path: |
@@ -129,7 +129,7 @@ jobs:
           release_name: Release v${{ github.run_number }}
           body: ""
     
-      - uses: actions/upload-release-asset@v4
+      - uses: actions/upload-release-asset@v1
         name: Upload apk (arm64-v8a)
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -139,7 +139,7 @@ jobs:
           asset_path:  ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_arm64-v8a.apk
           asset_content_type: application/zip
     
-      - uses: actions/upload-release-asset@v4
+      - uses: actions/upload-release-asset@v1
         name: Upload apk (armeabi-v7a)
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -149,7 +149,7 @@ jobs:
           asset_path: ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_armeabi-v7a.apk
           asset_content_type: application/zip
     
-      - uses: actions/upload-release-asset@v4
+      - uses: actions/upload-release-asset@v1
         name: Upload apk (x86_64)
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -159,7 +159,7 @@ jobs:
           asset_path: ${{ env.APK_DIR_PATH }}/${{ env.APK_BASENAME_PREFIX }}_x86_64.apk
           asset_content_type: application/zip
     
-      - uses: actions/upload-release-asset@v4
+      - uses: actions/upload-release-asset@v1
         name: Upload apk (x86)
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
