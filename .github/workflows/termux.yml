@@ -24,7 +24,6 @@ jobs:
         with:
           repository: termux/termux-app
           fetch-depth: 1
-          ref: github-releases/v0.119.0-beta.1
 
       - name: Build APKs
         shell: bash {0}
@@ -36,13 +35,35 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
               GITHUB_SHA="${{ github.event.pull_request.head.sha }}" # Do not use last merge commit set in GITHUB_SHA
           fi
-          # Set RELEASE_VERSION_NAME to "<CURRENT_VERSION_NAME>+<last_commit_hash>"
+          # 设置 RELEASE_VERSION_NAME 为 "<CURRENT_VERSION_NAME>+<timestamp>"
           CURRENT_VERSION_NAME_REGEX='\s+versionName "([^"]+)"$'
           CURRENT_VERSION_NAME="$(grep -m 1 -E "$CURRENT_VERSION_NAME_REGEX" ./app/build.gradle | sed -r "s/$CURRENT_VERSION_NAME_REGEX/\1/")"
-          RELEASE_VERSION_NAME="v$CURRENT_VERSION_NAME+${GITHUB_SHA:0:7}" # The "+" is necessary so that versioning precedence is not affected
+
+          # --- 修改开始 ---
+          # 生成基于时间的后缀（例如：YYYYMMDDHHMMSS 格式）
+          # 使用 UTC 时间 ('-u') 可以确保在不同时区的构建服务器上获得一致的时间戳
+          TIMESTAMP_SUFFIX=$(date -u +%Y%m%d%H%M%S)
+          # 如果你想使用服务器本地时间，可以去掉 '-u'：
+          # TIMESTAMP_SUFFIX=$(date +%Y%m%d%H%M%S)
+
+          # 构建 Release 版本名称，使用时间戳作为构建元数据 (build metadata)
+          # 原来的方式是: +${GITHUB_SHA:0:7}
+          RELEASE_VERSION_NAME="v$CURRENT_VERSION_NAME+$TIMESTAMP_SUFFIX" # "+" 号是 SemVer 规范中用于分隔构建元数据的
+          # --- 修改结束 ---
+
+          # 验证版本名称是否符合 Semantic Versioning '2.0.0' 规范
+          # 格式为 'major.minor.patch(-prerelease)(+buildmetadata)'
+          # 我们生成的时间戳 (例如 20250407083047) 是合法的构建元数据 ([0-9a-zA-Z-]+)
           if ! printf "%s" "${RELEASE_VERSION_NAME/v/}" | grep -qP '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'; then
-           exit_on_error "The versionName '${RELEASE_VERSION_NAME/v/}' is not a valid version as per semantic version '2.0.0' spec in the format 'major.minor.patch(-prerelease)(+buildmetadata)'. https://semver.org/spec/v4.0.0.html."
+                exit_on_error "版本名称 '${RELEASE_VERSION_NAME/v/}' 不符合 Semantic Version '2.0.0' 规范（格式 'major.minor.patch(-prerelease)(+buildmetadata)'）。详情请见: https://semver.org/spec/v4.0.0.html"
           fi
+
+          # (可选) 打印生成的版本名称，用于调试或记录
+          echo "生成的 Release 版本名称: $RELEASE_VERSION_NAME"
+
+          # 假设 exit_on_error 是一个已经定义的函数，用于在出错时退出
+          # declare -f exit_on_error > /dev/null || exit_on_error() { echo "错误: $1" >&2; exit
+          1; }
           APK_DIR_PATH="./app/build/outputs/apk/debug"
           APK_VERSION_TAG="$RELEASE_VERSION_NAME-${{ env.PACKAGE_VARIANT }}-github-debug" # Note the "-", GITHUB_SHA will already have "+" before it
           APK_BASENAME_PREFIX="termux-app_$APK_VERSION_TAG"
