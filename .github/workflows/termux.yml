@@ -24,6 +24,7 @@ jobs:
         with:
           repository: termux/termux-app
           fetch-depth: 1
+          ref: github-releases/v0.119.0-beta.2
 
       - name: Build APKs
         shell: bash {0}
@@ -62,8 +63,8 @@ jobs:
           echo "生成的 Release 版本名称: $RELEASE_VERSION_NAME"
 
           # 假设 exit_on_error 是一个已经定义的函数，用于在出错时退出
-          # declare -f exit_on_error > /dev/null || exit_on_error() { echo "错误: $1" >&2; exit
-          1; }
+          # declare -f exit_on_error > /dev/null || exit_on_error() { echo "错误: $1" >&2; exit 1; }
+          
           APK_DIR_PATH="./app/build/outputs/apk/debug"
           APK_VERSION_TAG="$RELEASE_VERSION_NAME-${{ env.PACKAGE_VARIANT }}-github-debug" # Note the "-", GITHUB_SHA will already have "+" before it
           APK_BASENAME_PREFIX="termux-app_$APK_VERSION_TAG"
